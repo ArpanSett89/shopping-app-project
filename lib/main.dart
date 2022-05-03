@@ -24,12 +24,11 @@ class _MyAppState extends State<StatefulWidget> {
   @override
   void initState() {
     super.initState();
-    getValidationData();
+     getValidationData();
   }
   var finalPhNo;
-  final Future<SharedPreferences> sharedPreferences =  SharedPreferences.getInstance();
   Future getValidationData() async{
-    final SharedPreferences sharedPreferences =  await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final obtainPhNo = await sharedPreferences.getString('phoneNo');
    setState(() {
      finalPhNo = obtainPhNo;

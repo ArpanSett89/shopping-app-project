@@ -6,6 +6,7 @@ import '../product details/models.dart';
 import '../product details/product list.dart';
 import 'exclusiveoffer page.dart';
 import 'onItemTap.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 Widget buildGrid(BuildContext context, List<Products> product) {
   return NotificationListener<OverscrollIndicatorNotification>(
@@ -83,7 +84,7 @@ Widget buildGrid(BuildContext context, List<Products> product) {
                   height: 50,
                   width: 150,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    padding: const EdgeInsets.only(left: 10, ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -98,6 +99,7 @@ Widget buildGrid(BuildContext context, List<Products> product) {
                             ),
                           ],
                         ),
+                        SizedBox(width: 9,),
                         IconButton(
                             onPressed: () {},
                             icon: Icon(
@@ -123,55 +125,89 @@ Widget buildGrid(BuildContext context, List<Products> product) {
   );
 }
 
-Widget list(BuildContext context, List<String> items) {
-  return Container(
-    width: MediaQuery.of(context).size.width,
-    height: 185,
-    child: Stack(children: [
-      NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (overScroll) {
-          overScroll.disallowIndicator();
-          return false;
-        },
-        child: PageView.builder(
-            controller: controller,
-            scrollDirection: Axis.horizontal,
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: EdgeInsets.all(16),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
-                    items[index],
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            }),
-      ),
-      Container(
-        margin: EdgeInsets.only(bottom: 20),
-        alignment: Alignment.bottomCenter,
-        child: _buildIndicator(),
-      )
-    ]),
-  );
+class CustomList extends StatefulWidget {
+  final List<String> items;
+  const CustomList({Key? key,required this.items}) : super(key: key);
+
+  @override
+  State<CustomList> createState() => _CustomListState();
 }
 
-Widget _buildIndicator() => SmoothPageIndicator(
-      controller: controller,
-      count: images.length,
-      axisDirection: Axis.horizontal,
-      effect: WormEffect(
-          spacing: 10.0,
-          radius: 15.0,
-          dotWidth: 10.0,
-          dotHeight: 10.0,
-          paintStyle: PaintingStyle.fill,
-          dotColor: Colors.grey,
-          activeDotColor: Colors.green),
+class _CustomListState extends State<CustomList> {
+  @override
+  int _current = 0;
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 185,
+      child: Stack(children: [
+        NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overScroll) {
+            overScroll.disallowIndicator();
+            return false;
+          },
+          child: Swiper(
+              onIndexChanged: (index) {
+                setState(() {
+                  _current = index;
+                });
+              },
+              autoplay: true,
+              layout: SwiperLayout.DEFAULT,
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.items.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: EdgeInsets.all(16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.asset(
+                      widget.items[index],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              }),
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 20),
+          alignment: Alignment.bottomCenter,
+          child:Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+              children: map(
+                widget.items,
+                    (index, image) {
+                  return Container(
+                    margin: const EdgeInsets.all(4.0),
+                    alignment: Alignment.centerLeft,
+                    height: 10,
+                    width: 10,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _current == index
+                            ? Colors.green
+                            : Colors.grey),
+                  );
+                },
+              ))
+        )
+      ]),
     );
+  }
+}
+
+
+
+
+
 
 Widget profile() {
   return Container(
@@ -256,119 +292,7 @@ Widget offers(context, title, button, VoidCallback onPressed) {
   );
 }
 
-Widget list1(BuildContext context, List<Products> product) {
-  return Container(
-    width: MediaQuery.of(context).size.width,
-    height: 200,
-    child: NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (overScroll) {
-        overScroll.disallowIndicator();
-        return false;
-      },
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 4,
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ItemDetails(
-                          appBarTitle: product[index].title,
-                          item: product[index])),
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.black.withOpacity(0.2),
-                        width: 1.0,
-                        style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(
-                          1.0,
-                          1.0,
-                        ),
-                        color: Colors.white,
-                        spreadRadius: 2,
-                        blurRadius: 10,
-                      )
-                    ]),
-                margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        child: Image.asset(
-                          product[index].imageURL,
-                          fit: BoxFit.cover,
-                          height: 100,
-                          width: 140,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      product[index].title,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.black),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: Text(
-                        product[index].subtitle,
-                        style: TextStyle(
-                            fontSize: 12, color: Colors.black.withOpacity(0.5)),
-                      ),
-                    ),
-                    Container(
-                      height: 50,
-                      width: 140,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 9),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.attach_money_rounded,
-                                    size: 15, color: Colors.grey),
-                                Text(
-                                  product[index].amount,
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.favorite_outline,
-                                  color: Colors.red,
-                                  size: 20,
-                                )),
-                            CustomFloatingButton(
-                              w: 32,
-                              h: 32,
-                              r: 11,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-    ),
-  );
-}
+
 
 Widget listGrocery(BuildContext context, List<GroceryItems> items) {
   return Container(
@@ -387,7 +311,7 @@ Widget listGrocery(BuildContext context, List<GroceryItems> items) {
                   MaterialPageRoute(
                       builder: (context) => ExclusiveOffers(
                             appbartitle: 'Pulses',
-                            productList: Pulses,
+                            productList: items[index].GroceryItemsList,
                           )),
                 );
               },
@@ -433,3 +357,138 @@ Widget listGrocery(BuildContext context, List<GroceryItems> items) {
         }),
   );
 }
+
+class List1 extends StatefulWidget {
+  final List<Products> product;
+
+  const List1({Key? key, required this.product}) : super(key: key);
+
+  @override
+  State<List1> createState() => _List1State();
+}
+
+class _List1State extends State<List1> {
+  bool isFavourite =false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 200,
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (overScroll) {
+          overScroll.disallowIndicator();
+          return false;
+        },
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 4,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ItemDetails(
+                            appBarTitle: widget.product[index].title,
+                            item: widget.product[index])),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Colors.black.withOpacity(0.2),
+                          width: 1.0,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: const Offset(
+                            1.0,
+                            1.0,
+                          ),
+                          color: Colors.white,
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                        )
+                      ]),
+                  margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          child: Image.asset(
+                            widget.product[index].imageURL,
+                            fit: BoxFit.cover,
+                            height: 100,
+                            width: 140,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        widget.product[index].title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Text(
+                          widget.product[index].subtitle,
+                          style: TextStyle(
+                              fontSize: 12, color: Colors.black.withOpacity(0.5)),
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        width: 140,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 9),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.attach_money_rounded,
+                                      size: 15, color: Colors.grey),
+                                  Text(
+                                    widget.product[index].amount,
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              IconButton(
+                                  onPressed: (){
+                                    setState(() {
+                                      isFavourite=!isFavourite;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    isFavourite
+                                        ? Icons.favorite_outline
+                                        : Icons.favorite,
+                                    color: Colors.red,
+                                    size: 20,
+                                  )),
+                              CustomFloatingButton(
+                                w: 32,
+                                h: 32,
+                                r: 11,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+      ),
+    );
+  }
+}
+
+

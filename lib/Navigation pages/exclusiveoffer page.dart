@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Buttons.dart';
 import '../product details/models.dart';
 import 'required Widget.dart';
 
@@ -19,12 +20,7 @@ class _ExclusiveOffersState extends State<ExclusiveOffers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios,color: Colors.green,),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: AppBarButton(),
         title: Text(
           widget.appbartitle,
           style: TextStyle(fontSize: 20, color: Colors.green),

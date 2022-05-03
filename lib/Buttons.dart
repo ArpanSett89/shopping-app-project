@@ -145,3 +145,17 @@ class CustomFloatingButton extends StatelessWidget {
     );
   }
 }
+class AppBarButton extends StatelessWidget {
+  const AppBarButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back_ios,color: Colors.green,),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+}
+

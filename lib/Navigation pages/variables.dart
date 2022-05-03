@@ -1,2 +1,4 @@
 import 'package:flutter/material.dart';
-final PageController controller = PageController(initialPage: 0);
+import 'package:flutter_swiper/flutter_swiper.dart';
+final SwiperController controller = SwiperController();
+bool isFavourite = false;

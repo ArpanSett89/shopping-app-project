@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Buttons.dart';
+
 class Favourite extends StatefulWidget {
   const Favourite({Key? key}) : super(key: key);
 
@@ -12,6 +14,7 @@ class _FavouriteState extends State<Favourite> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: AppBarButton(),
         title: Text(
           'Favourite',
           style: TextStyle(fontSize: 20, color: Colors.green),

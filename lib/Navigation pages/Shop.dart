@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shoppingapp/Navigation%20pages/onItemTap.dart';
 import 'package:shoppingapp/product%20details/product%20list.dart';
 import 'Groceries.dart';
 import 'exclusiveoffer page.dart';
@@ -27,7 +26,7 @@ class _ShopState extends State<Shop> {
             children: [
               profile(),
               searchBar(),
-              list(context, images),
+              CustomList( items: images,),
               offers(context, 'Exclusive offer', 'See all', () {
                 Navigator.push(
                   context,
@@ -38,8 +37,8 @@ class _ShopState extends State<Shop> {
                           )),
                 );
               }),
-              list1(context, ExclusiveOfferList,),
-              offers(context, 'Best Selling', 'See all', () {
+              List1(product: ExclusiveOfferList),
+              offers(context,'Best Selling', 'See all', () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -49,7 +48,7 @@ class _ShopState extends State<Shop> {
                           )),
                 );
               }),
-              list1(context, BestSellingList),
+              List1(product: BestSellingList),
               offers(context, 'Groceries', 'See all', () {
                 Navigator.push(
                   context,

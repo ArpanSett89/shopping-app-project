@@ -16,12 +16,7 @@ class _ItemDetailsState extends State<ItemDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios,color: Colors.green,),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: AppBarButton(),
         title: Text(
           widget.appBarTitle,
           style: TextStyle(fontSize: 20, color: Colors.green),

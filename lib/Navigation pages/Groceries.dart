@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Buttons.dart';
 import '../product details/models.dart';
 import '../product details/product list.dart';
 import 'exclusiveoffer page.dart';
@@ -16,12 +17,7 @@ class _GroceriesViewState extends State<GroceriesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios,color: Colors.green,),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: AppBarButton(),
         title: Text(
           widget.appBarTitle,
           style: TextStyle(fontSize: 20, color: Colors.green),
@@ -33,24 +29,24 @@ class _GroceriesViewState extends State<GroceriesView> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
-            child: buildGrid(context,widget.productList,() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ExclusiveOffers(appbartitle: 'Pulses', productList: Pulses,)),
-              );
-            })),
+            child: buildGrid(context,widget.productList,)),
       ),
     );
   }
 }
-Widget buildGrid(BuildContext context, List<GroceryItems> product,VoidCallback ontap) {
+Widget buildGrid(BuildContext context, List<GroceryItems> product,) {
   return GridView.builder(
     gridDelegate:
     SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing: 15,childAspectRatio: 1.0),
     itemCount:product.length,
     itemBuilder: (BuildContext context,  index,) {
       return GestureDetector(
-        onTap: ontap,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ExclusiveOffers(appbartitle: 'Pulses', productList: product[index].GroceryItemsList,)),
+          );
+        },
         child: Container(
           decoration: BoxDecoration(
             color: product[index].itemColor,
